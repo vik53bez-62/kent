@@ -32,7 +32,14 @@ Workflow ndroid-ci.yml и go-ci.yml запускаются для веток ma
 
 .gitlab-ci.yml содержит jobs go_build и ndroid_debug (правила main/develop).
 
-Переменные (Settings → CI/CD → Variables): те же значения, Mask для чувствительных данных.
+Добавление переменных: Settings → CI/CD → Variables → Add variable (отметьте Protect/Mask).
+
+Чтобы запустить пайплайн вручную:
+
+1. Откройте вкладку CI/CD. 
+2. Выберите пункт Pipelines.
+3. Справа вверху нажмите кнопку Run pipeline.
+4. В выпадающем списке укажите ветку (main или develop) и подтвердите запуск.
 
 ## Запуск dev-стенда
 
