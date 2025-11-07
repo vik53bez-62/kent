@@ -3,23 +3,68 @@
 Готовый скелет мессенджера Kent:
 
 - Android (Kotlin/Compose/Hilt), package: com.kent.app
-- Сервер (Go + Gin + Redis), OTP (Infobip)
-- Docker Compose (Postgres, Redis, NATS, MinIO — можно расширять)
-- CI (GitHub Actions), черновики документов для Google Play
+- Go API (Gin + Redis)
+- Docker Compose (Redis + API)
+- CI (GitHub Actions, GitLab CI) + черновики документов для Google Play
 
-Быстрый старт:
+## Ветки и релизы
 
-1) Сервер (dev):
-   - cp server/.env.example server/.env  # укажите ключи Infobip
-   - cd infra && docker-compose up -d --build
-   - GET http://localhost:8080/health -> {"status":"ok"}
+- main — стабильные релизы, теги X.Y.Z. Merge только через PR после успешных пайплайнов и ревью.
+- develop — интеграционная ветка. Feature/hotfix ветки ответвляются от неё и попадают через PR.
+- eature/* — фичи. По завершении — PR в develop.
+- hotfix/* — срочные фиксы для main, после merge — обратно в develop.
 
-2) Android:
-   - Откройте android/ в Android Studio
-   - Сборка: ./gradlew :app:assembleDebug
+## CI/CD
 
-3) OTP:
-   - POST /v1/auth/otp/request {"phone":"+15551234567"}
-   - POST /v1/auth/otp/verify {"phone":"+15551234567","code":"123456"}
+### GitHub Actions
 
-Примечание: версии Gradle/AGP/Kotlin/Compose можно обновить автофиксами Android Studio.
+Workflow ndroid-ci.yml и go-ci.yml запускаются для веток main и develop.
+
+Переменные (Actions → Secrets and variables → Actions):
+
+- INFOBIP_BASE_URL
+- INFOBIP_API_KEY
+- INFOBIP_FROM
+- OTP_SECRET
+- OTP_TTL_SECONDS (300)
+
+### GitLab CI
+
+.gitlab-ci.yml содержит jobs go_build и ndroid_debug (правила main/develop).
+
+Переменные (Settings → CI/CD → Variables): те же значения, Mask для чувствительных данных.
+
+## Запуск dev-стенда
+
+`ash
+cp server/.env.example server/.env
+# заполните InfoBip и OTP_SECRET
+cd infra
+# с Redis и API в Docker (на локальном Git нельзя использовать Postgres/NATS/MinIO по умолчанию)
+docker-compose up -d --build
+curl http://localhost:8080/health
+`
+
+## Android проект
+
+Открыть каталог ndroid/ в Android Studio:
+
+`ash
+./gradlew :app:assembleDebug
+`
+
+## Секции docs/
+
+- PRIVACY_POLICY.md
+- TERMS.md
+- PLAY_LISTING.md
+- DATA_SAFETY.md
+- API.md
+
+## Лицензия
+
+Apache License 2.0 (LICENSE).
+
+## Contributing
+
+Правила PR/веток и чек-листы описаны в CONTRIBUTING.md.
