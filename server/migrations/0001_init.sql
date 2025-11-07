@@ -1,0 +1,2 @@
+-- Placeholder: расширьте схемами users/messages позже
+-- Для демо OTP и health миграции не требуются.

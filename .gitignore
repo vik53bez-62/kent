@@ -1,0 +1,13 @@
+# Android
+android/**/.gradle/
+android/**/build/
+android/**/.idea/
+android/**/local.properties
+*.iml
+
+# Go
+server/bin/
+server/.env
+
+# Misc
+.DS_Store
